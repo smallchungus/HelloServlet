@@ -78,7 +78,7 @@ public class EmployeeServlet extends HttpServlet {
 				
 				
 		} catch (Exception e) {
-			System.out.println("there is an error in the doPost method");
+			System.out.println("there is an error in the doPost method possibly");
 			e.printStackTrace();
 		}
 
