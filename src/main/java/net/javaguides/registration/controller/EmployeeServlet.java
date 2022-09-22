@@ -4,15 +4,19 @@ import java.io.FileWriter;
 import java.io.FileOutputStream;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 
 
-import com.aspose.cells.Workbook;
-import com.aspose.cells.Worksheet;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.javaguides.registration.model.Employee;
+
 
 /**
  * Servlet implementation class HelloServlet
@@ -108,7 +112,7 @@ public class EmployeeServlet extends HttpServlet {
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
-			//	System.out.println(data);
+				System.out.println(data);
 				count++;
 			}
 			myReader.close();
@@ -125,41 +129,45 @@ public class EmployeeServlet extends HttpServlet {
 	private static void exportFile ( String inputFileName, int size )
 	{
 		try {
-			//System.out.println("the export file works up to this point I guess");
-			Workbook workbook = new Workbook("C:\\Users\\wchen\\eclipse\\jee-2022-06\\eclipse\\excelOutput.xlsx");
-			Worksheet worksheet = workbook.getWorksheets().get(0);
-			int [][] array2D = new int [size/2][2];
-			int count = 0; 
-			File myObj = new File(inputFileName);
-			Scanner myReader = new Scanner(myObj);
-			System.out.println("the export file works up to this point I guess");
-	
-			for ( int i =0; i < size/2; i ++ ) 
-			{
-				for ( int j = 0; j < 2; j ++ ) 
-				{
-				String data = myReader.nextLine();
-				
-				if ( count % 2 == 0 )
-				{
-					array2D[i][j] = count;
-					System.out.println(array2D[i][j]);
-				}
-				else {
-					array2D[i][j] = count;
-					System.out.println(array2D[i][j]);
-				}
-				count++;
-				}
-			}
-			myReader.close();
-			String[] names = new String[] { "Laurence Chen", "Roman Korchagin", "Kyle Huang" };
-			worksheet.getCells().importArray(names, 0, 0, true);
+	        // Creating a workbook instances
+	        Workbook wb = new HSSFWorkbook();
+	 
+	        // Creating output file
+	        OutputStream os
+	            = new FileOutputStream("Geeks.xlsx");
+	 
+	        // Creating a sheet using predefined class
+	        // provided by Apache POI
+	        Sheet sheet = wb.createSheet("Company Preparation");
+	 
+	        // Creating a row at specific position
+	        // using predefined class provided by Apache POI
+	 
+	        // Specific row number
+	        Row row = sheet.createRow(1);
+	 
+	        // Specific cell number
+	        Cell cell = row.createCell(1);
+	 
+	        // putting value at specific position
+	        cell.setCellValue("Geeks");
+	 
+	        // Finding index value of row and column of give
+	        // cell
+	        int rowIndex = cell.getRowIndex();
+	        int columnIndex = cell.getColumnIndex();
+	 
+	        // Writing the content to Workbook
+	        wb.write(os);
+	 
+	        // Printing the row and column index of cell created
+	        System.out.println("Given cell is created at "
+	                           + "(" + rowIndex + ","
+	                           + columnIndex + ")");
 
 //			worksheet.getCells().importArray(array2D, 0, 0);
 //			workbook.save("C:\\Users\\wchen\\eclipse\\jee-2022-06\\eclipse\\excelOutput.xlsx");
-			workbook.save("C:\\Files\\output.xlsx");
-			
+
 			
 		}
 		catch (Exception E)
